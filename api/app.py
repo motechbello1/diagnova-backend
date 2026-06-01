@@ -352,6 +352,11 @@ def calculate_crs(result):
 # API ENDPOINTS
 # ============================================================
 
+
+@app.route('/')
+def index():
+    return jsonify({'service': 'DiagNova API', 'status': 'running', 'rules': len(RULES)})
+
 @app.route('/api/health', methods=['GET'])
 def health():
     return jsonify({'status': 'healthy', 'rules_loaded': len(RULES), 'version': '1.0.0'})
@@ -452,3 +457,4 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     print(f"DiagNova API starting on port {port} with {len(RULES)} rules loaded")
     app.run(host='0.0.0.0', port=port, debug=os.environ.get('FLASK_ENV') != 'production')
+
