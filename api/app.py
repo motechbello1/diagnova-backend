@@ -325,11 +325,19 @@ def assess():
     stab = data.get('stability', {})
     usa = data.get('usability', {})
     ft = data.get('fault_tolerance', {})
+    for d in [perf, stab, usa]:
+        for k in list(d.keys()):
+            try: d[k] = float(d[k])
+            except: pass
+    rts_raw = ft.get('recovery_times', [0])
+    rts = []
+    for x in rts_raw:
+        try: rts.append(float(x))
+        except: pass
+    if not rts: rts = [0]
     mem_avail = max(perf.get('memory_available', 1), 1)
     sessions = max(stab.get('sessions', 1), 1)
     comp_rate = max(usa.get('completion_rate', 0.01), 0.01)
-    rts = ft.get('recovery_times', [0])
-    if not rts: rts = [0]
     facts = {
         'st': perf.get('startup_time', 0),
         'mer': (perf.get('memory_used', 0) / mem_avail) * 100,
